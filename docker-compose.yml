@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  backend:
+    build: ./
+    container_name: tech_demo_backend
+    restart: always
+    ports:
+      - '3000:3000'
+
+  postgres:
+    container_name: postgres_tech_demo
+    image: postgres:latest
+    restart: always
+    ports:
+      - '6543:5432'
+    volumes:
+      - ./docker_volumes/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: demo-tech
