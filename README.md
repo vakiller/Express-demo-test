@@ -43,3 +43,6 @@ It's a simple rest api application, we can create new user, sign in, get new tok
 * "docker files": Docker compose file and Dockerfile
 * ".env": enviroment file.
 
+# Author
+Aiden Le - Savvycom Software
+
