@@ -8,21 +8,21 @@ async function getAllItems() {
 }
 
 async function createNewItem(payload) {
-    const user = await getUserById(payload.userId);
-    if (!user || user === null) {
-        throw new createNotFoundError("User Not Found");
-    }
-    if (!payload || payload === null) { 
-        throw new createBadRequestError("Invalid Payload");    
-    }
-
+    
     const bodyNewItem = {
         name: payload.name,
         damage: payload.damage,
         description: payload.description,
-        price: payload.price,
-        user: {id: user.id}
+        price: payload.price
     };
+
+    if (payload.userId) {
+        const user = await getUserById(payload.userId);
+        if (!user || user === null) {
+            throw new createNotFoundError("User Not Found");
+        }
+        bodyNewItem.user = {id: user.id};
+    }
 
     const item = await create(bodyNewItem);
     return {item};
