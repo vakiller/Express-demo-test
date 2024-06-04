@@ -11,7 +11,7 @@ module.exports = new EntitySchema({
         },
         name: {
             type: 'varchar',
-            unique: true
+            unique: false
         },
         damage: {
             type: 'int'
