@@ -1,4 +1,5 @@
-const {signUpNewUser, signInUser} = require('./auth.service');
+const { createBadRequestError } = require('../../helpers/CustomErrors');
+const {signUpNewUser, signInUser, refreshTokenUser} = require('./auth.service');
 
 async function signup(req, res, next) {
     const { username, password } = req.body;
@@ -32,4 +33,16 @@ async function signin(req, res, next) {
     }
 }
 
-module.exports = { signup, signin };
+async function refreshToken(req, res, next) {
+    try {
+        if (!req.body.refreshToken || req.body.refreshToken === null) {
+            throw createBadRequestError("Refresh Token is required");
+        }
+        const result = await refreshTokenUser(req.body.refreshToken);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { signup, signin, refreshToken };

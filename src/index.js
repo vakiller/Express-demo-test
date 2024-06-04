@@ -5,6 +5,7 @@ const {authRouter} = require("./routes/auth.route");
 const {itemRouter} = require("./routes/item.route");
 const { AppDataSource } = require("./database/data-source");
 const { errorHandler } = require("./middlewares/error-handler");
+const { authenticateToken } = require("./middlewares/authenticate");
 
 
 dotenv.config();
@@ -19,7 +20,7 @@ const { PORT = 3000 } = process.env;
 // });
 
 app.use("/auth", authRouter);
-app.use("/item", itemRouter);
+app.use("/item",authenticateToken ,itemRouter);
 app.use(errorHandler);
 
 AppDataSource.initialize().then(async () => {

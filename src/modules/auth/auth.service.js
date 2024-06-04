@@ -1,7 +1,9 @@
+const { use } = require('bcrypt/promises');
 const { AppDataSource } = require('../../database/data-source');
-const { createNotFoundError } = require('../../helpers/CustomErrors');
+const { createNotFoundError, createUnAuthorizedError } = require('../../helpers/CustomErrors');
 const {encryptPassword, generateToken, comparePassword} = require('../../helpers/token-helpers'); 
 const { createUser, getUserByUsername } = require('../../repository/user.repository');
+const jwt = require('jsonwebtoken');
 
 async function signUpNewUser(payload) {
     const {username, password} = payload;
@@ -32,7 +34,7 @@ async function signInUser(payload) {
     const isValidPassword = await comparePassword(user.password, password);
 
     if (!isValidPassword) {
-        throw new NotAuthorizedError("Invalid password");
+        throw new createUnAuthorizedError("Invalid password");
     }
 
     const token = await generateToken(
@@ -48,4 +50,24 @@ async function signInUser(payload) {
     return {username, refreshToken, token};
 }
 
-module.exports = {signUpNewUser, signInUser}
+async function refreshTokenUser(refreshTokenRequest) {
+    try {
+        const verified = jwt.verify(refreshTokenRequest, process.env.JWT_REFRESH_SECRET);
+        const {username, password, role} = verified;
+        const token = await generateToken(
+        {username, password, role}, 
+        process.env.JWT_EXPIRES_IN, 
+        process.env.JWT_SECRET);
+    
+        const refreshToken = await generateToken(
+        {username, password, role}, 
+        process.env.JWT_REFRESH_EXPIRES_IN, 
+        process.env.JWT_REFRESH_SECRET
+    );
+    return {username, refreshToken, token};
+    } catch (error) {
+        throw new createUnAuthorizedError("Invalid Refresh Token");
+    }
+}
+
+module.exports = {signUpNewUser, signInUser, refreshTokenUser}
