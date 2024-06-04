@@ -1,5 +1,3 @@
-const { use } = require('bcrypt/promises');
-const { AppDataSource } = require('../../database/data-source');
 const { createNotFoundError, createUnAuthorizedError } = require('../../helpers/CustomErrors');
 const {encryptPassword, generateToken, comparePassword} = require('../../helpers/token-helpers'); 
 const { createUser, getUserByUsername } = require('../../repository/user.repository');

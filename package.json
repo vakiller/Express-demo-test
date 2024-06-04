@@ -19,6 +19,10 @@
     "start:dev": "nodemon src/index.js",
     "migration:run": "typeorm migration:run -d ./src/database/data-source.js",
     "migration:revert": "typeorm migration:revert -d ./src/database/data-source.js",
-    "migration:generate": "typeorm migration:generate -d ./src/database/data-source.js"
+    "migration:generate": "typeorm migration:generate -d ./src/database/data-source.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
