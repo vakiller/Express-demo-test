@@ -6,8 +6,23 @@ services:
     restart: always
     ports:
       - '3000:3000'
+    environment:
+      - DB_HOST=postgres_service
+      - DB_PORT=5432
+      - STAGE=development
+      - DB_USERNAME=admin
+      - DB_PASSWORD=root
+      - DB_DATABASE=demo-tech
+      - JWT_SECRET=fc9116e77ccdfd4f8d47ea08fe572b1c
+      - JWT_REFRESH_SECRET=fb475e8edda2d7820dc06ea80d8563e5
+      - JWT_EXPIRES_IN=36000s
+      - JWT_REFRESH_EXPIRES_IN=2592000s
+    depends_on:
+      - postgres_service
+    networks:
+      - app-network
 
-  postgres:
+  postgres_service:
     container_name: postgres_tech_demo
     image: postgres:latest
     restart: always
@@ -19,3 +34,8 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
       POSTGRES_DB: demo-tech
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
