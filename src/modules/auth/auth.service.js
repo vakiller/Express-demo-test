@@ -14,7 +14,6 @@ async function signUpNewUser(payload) {
     const newUserPayload = {...payload, password: hashedPassword, role: "user"};
 
     await createUser(newUserPayload);
-    console.log("JWT ", process.env.JWT_EXPIRES_IN, process.env.JWT_SECRET);
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, "user")

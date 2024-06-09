@@ -5,7 +5,6 @@ const stage = process.env.NODE_ENV;
 config({ path: stage ? `.env.${stage}`: '.env.development' });
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } =
   process.env;
-console.log({HOST: DB_HOST})
 const AppDataSource = new DataSource(
     {
         type: 'postgres',
