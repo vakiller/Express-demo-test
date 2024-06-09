@@ -1,0 +1,209 @@
+{
+    "info": {
+        "_postman_id": "29cdd95c-1dfa-48be-8203-77db8d089fba",
+        "name": "Test Collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "http://localhost:3000/item",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/item",
+                    "path": [
+                        "item"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"Sword Wind\",\n  \"damage\": 88,\n  \"description\": \"A Sword made from Wind\",\n  \"price\": 30,\n  \"userId\": 11\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlMTAiLCJwYXNzd29yZCI6IjEyMzQ1NiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE3OTU0MzMxLCJleHAiOjE3MTc5OTAzMzF9.2ouE3rFTYJZwXTdnuw6OW4cicShoZYrDE99hceDaVj0",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/auth/signup",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/signup",
+                    "path": [
+                        "auth",
+                        "signup"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"username\": \"te10\",\n  \"password\": \"123456\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/auth/sigin",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/signin",
+                    "path": [
+                        "auth",
+                        "signin"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"username\": \"te10\",\n  \"password\": \"123456\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/item",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/item",
+                    "path": [
+                        "item"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlMTAiLCJwYXNzd29yZCI6IjEyMzQ1NiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE3OTUwNDYwLCJleHAiOjE3MTc5ODY0NjB9.WrDs1YsXjMWpZ4XWObH7aMfCofPnwdJr5I5lwIHRrL8",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/item/2",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/item/2",
+                    "path": [
+                        "item",
+                        "2"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"Sword Wind 3\",\n  \"damage\": 20,\n  \"description\": \"A Sword made from Wind 3\",\n  \"price\": 30,\n  \"userId\": 1\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/item",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/item/6",
+                    "path": [
+                        "item",
+                        "6"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxNzQ3MzE4MywiZXhwIjoxNzE3NTA5MTgzfQ.MzVTY5oK3WFjYVyvjW7gBs-Cz1ND9Itwk9fcKobdi_M",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "http://localhost:3000/auth/refresh",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/refresh-token",
+                    "path": [
+                        "auth",
+                        "refresh-token"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlMTAiLCJwYXNzd29yZCI6IjEyMzQ1NiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE3OTU0NDE2LCJleHAiOjE3MjA1NDY0MTZ9.0-rR6aOPMzfhuSP5JtM-0-co6ott_RYbBwdfyfe-mT0\"\n}"
+                }
+            }
+        }
+    ]
+}

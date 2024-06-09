@@ -19,7 +19,7 @@ A simple Express Project implement with Express Js + TypeOrm + Postgresql!
 3. Pull project from repository.<br>
 4. cd to project folder. <br>
 5. Run: yarn install<br>
-6. Run: docker compose up -d postgres_service
+6. Run: docker compose up -d postgres_service redis_service
 7. Run: yarn start:dev.<br>
 8. With Unit Test simply run: yarn test.<br>
 The server running in port 3000 by default.<br>
@@ -33,7 +33,7 @@ The server running in port 3000 by default.<br>
 The server running in port 3000 by default.<br>
 
 # Usage
-It's a simple rest api application, we can create new user, sign in, get new token with refresh token, CRUD items data, each users can have multiple items or one item can not be own by any user (userId = null). Detail please see in the postman collection.
+It's a simple rest api application, we can create new user, sign in, get new token with refresh token, CRUD items data, each users can have multiple items or one item can not be own by any user (userId = null). Detail please see in the postman collection "Test Collection_postman.json". Please import to get all api endpoint end test.
 
 # Structure 
 * "database": Database datasource, migration files and entities files.
