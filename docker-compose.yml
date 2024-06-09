@@ -17,8 +17,21 @@ services:
       - JWT_REFRESH_SECRET=fb475e8edda2d7820dc06ea80d8563e5
       - JWT_EXPIRES_IN=36000s
       - JWT_REFRESH_EXPIRES_IN=2592000s
+      - REDIS_HOST=redis://redis_service
+      - REDIS_PORT=6379
     depends_on:
       - postgres_service
+    networks:
+      - app-network
+  redis_service:
+    container_name: redis_tech_demo
+    image: redis:alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --loglevel warning
+    volumes:
+      - ./docker_volumes/cache:/data
     networks:
       - app-network
 

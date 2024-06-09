@@ -1,8 +1,8 @@
 const { createNotFoundError, createUnAuthorizedError, createBadRequestError } = require('../../helpers/CustomErrors');
 const {encryptPassword, generateToken, comparePassword} = require('../../helpers/token-helpers'); 
-const { create } = require('../../repository/item.repository');
 const { createUser, getUserByUsername } = require('../../repository/user.repository');
 const jwt = require('jsonwebtoken');
+const { clientRedis } = require('../../redis/redis-connection');
 
 async function signUpNewUser(payload) {
     const {username, password} = payload;
@@ -18,6 +18,7 @@ async function signUpNewUser(payload) {
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, "user")
+        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
         throw createBadRequestError("Error generating token: "+error.message);
@@ -43,6 +44,7 @@ async function signInUser(payload) {
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, "user")
+        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
         throw createBadRequestError("Error generating token: "+error.message);
@@ -56,8 +58,15 @@ async function refreshTokenUser(refreshTokenRequest) {
     }
     const {username, password, role} = verified;
     
+    const refreshToken = await clientRedis.get(username);
+    
+    if (refreshToken !== refreshTokenRequest) {
+        throw createUnAuthorizedError("Invalid refresh token");
+    }
+
     try {
-        const [token, refreshToken] = await generateRefreshAndToken(username, password, role)
+        const [token, refreshToken] = await generateRefreshAndToken(username, password, role);
+        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
         throw createBadRequestError("Error generating token: "+error.message);
