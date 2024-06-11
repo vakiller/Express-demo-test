@@ -1,6 +1,6 @@
 const {create, getItems, getItemById, deleteItem, updateItem} = require('../../repository/item.repository');
 const {getUserById} = require('../../repository/user.repository');
-const {createNotFoundError, createBadRequestError} = require('../../helpers/CustomErrors');
+const { NotFoundError } = require('../../helpers/CustomErrors');
 
 async function getAllItems() {
     const allItems = await getItems();
@@ -19,7 +19,7 @@ async function createNewItem(payload) {
     if (payload.userId) {
         const user = await getUserById(payload.userId);
         if (!user || user === null) {
-            throw new createNotFoundError("User Not Found");
+            throw NotFoundError("User Not Found");
         }
         bodyNewItem.user = {id: user.id};
     }
@@ -31,11 +31,11 @@ async function createNewItem(payload) {
 async function updateItemIfExist(itemId, payload) {
     const itemExisted = await getItemById(itemId);
     if (!itemExisted || itemExisted === null) {
-        throw new createNotFoundError("Item Not Found");
+        throw NotFoundError("Item Not Found");
     }
     const user = await getUserById(payload.userId);
     if (!user || user === null) {
-        throw new createNotFoundError("User Not Found");
+        throw NotFoundError("User Not Found");
     }
 
     const bodyUpdateItem = {
@@ -54,7 +54,7 @@ async function updateItemIfExist(itemId, payload) {
 async function deleteItemIfExist(itemId) {
     const itemExisted = await getItemById(itemId);
     if (!itemExisted || itemExisted === null) {
-        throw new createNotFoundError("Item Not Found");
+        throw NotFoundError("Item Not Found");
     }
     await deleteItem(itemId);
 }

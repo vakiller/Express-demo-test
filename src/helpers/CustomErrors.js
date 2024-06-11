@@ -1,24 +1,35 @@
-function createCustomError(message, status) {
-    const error = new Error(message);
-    error.statusCode = status;
-    return error;
+const StatusCodes = require('http-status-codes');
+
+class CustomError extends Error {
+    constructor(message, statusCode) {
+      super(message);
+      this.statusCode = statusCode;
+    }
 }
 
-function createNotFoundError(message) {
-    return createCustomError(message ?? "Not Found", 404);
-}
-
-function createBadRequestError(message) {
-    return createCustomError(message ?? "Bad Request", 400);
-}
-
-function createUnAuthorizedError(message) {
-    return createCustomError(message ?? "Unauthorized", 401);
-}
+class BadRequestError extends CustomError {
+    constructor(message = 'Bad Request') {
+      super(message, StatusCodes.BAD_REQUEST);
+    }
+  }
+  
+class NotFoundError extends CustomError {
+  
+    constructor(message = 'Not Found') {
+      super(message, StatusCodes.NOT_FOUND);
+    }
+  }
+  
+class NotAuthorizedError extends CustomError {
+  
+    constructor(message) {
+      super(message, StatusCodes.UNAUTHORIZED);
+    }
+  }
 
 module.exports = { 
-    createCustomError, 
-    createNotFoundError, 
-    createBadRequestError, 
-    createUnAuthorizedError
+    CustomError,
+    BadRequestError,
+    NotFoundError,
+    NotAuthorizedError
 }

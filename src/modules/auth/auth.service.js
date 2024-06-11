@@ -1,13 +1,13 @@
-const { createNotFoundError, createUnAuthorizedError, createBadRequestError } = require('../../helpers/CustomErrors');
+const jwt = require('jsonwebtoken');
+const { BadRequestError, NotFoundError, NotAuthorizedError } = require('../../helpers/CustomErrors');
 const {encryptPassword, generateToken, comparePassword} = require('../../helpers/token-helpers'); 
 const { createUser, getUserByUsername } = require('../../repository/user.repository');
-const jwt = require('jsonwebtoken');
-const { clientRedis } = require('../../redis/redis-connection');
+const { setStringRedis, getStringRedis } = require('../../redis/redis-helper');
 
 async function signUpNewUser(payload) {
     const {username, password} = payload;
     if (!username || !password) {
-        throw createBadRequestError("Username and password are required");
+        throw BadRequestError('Username and password are required');
     }
 
     const hashedPassword = await encryptPassword(password);
@@ -17,10 +17,11 @@ async function signUpNewUser(payload) {
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, "user")
-        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
+        await setStringRedis(username, refreshToken, process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
-        throw createBadRequestError("Error generating token: "+error.message);
+        console.log("Exception from auth.service.js: ",error.message);
+        throw error;
     }
     
 }
@@ -28,47 +29,49 @@ async function signUpNewUser(payload) {
 async function signInUser(payload) {
     const {username, password} = payload;
     if (!username || !password) {
-        throw createBadRequestError("Username and password are required");
+        throw BadRequestError("Username and password are required");
     }
     
     const user = await getUserByUsername(username);
     if (!user || user === null) {
-        throw new createNotFoundError("User Not Found");
+        throw new NotFoundError("User Not Found");
     }
     const isValidPassword = await comparePassword(user.password, password);
 
     if (!isValidPassword) {
-        throw new createUnAuthorizedError("Invalid password");
+        throw new NotAuthorizedError("Invalid password");
     }
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, "user")
-        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
+        await setStringRedis(username, refreshToken, process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
-        throw createBadRequestError("Error generating token: "+error.message);
+        console.log("Exception from auth.service.js: ",error.message);
+        throw error;
     }
 }
 
 async function refreshTokenUser(refreshTokenRequest) {
     const verified = jwt.verify(refreshTokenRequest, process.env.JWT_REFRESH_SECRET);
     if (!verified) {
-        throw createUnAuthorizedError("Invalid refresh token");
+        throw NotAuthorizedError("Invalid refresh token");
     }
     const {username, password, role} = verified;
     
-    const refreshToken = await clientRedis.get(username);
+    const refreshToken = await getStringRedis(username);
     
     if (refreshToken !== refreshTokenRequest) {
-        throw createUnAuthorizedError("Invalid refresh token");
+        throw NotAuthorizedError("Invalid refresh token");
     }
 
     try {
         const [token, refreshToken] = await generateRefreshAndToken(username, password, role);
-        await clientRedis.set(username, refreshToken, 'EX', process.env.JWT_REFRESH_EXPIRES_IN);
+        await setStringRedis(username, refreshToken, process.env.JWT_REFRESH_EXPIRES_IN);
         return {username, refreshToken, token};
     } catch (error) {
-        throw createBadRequestError("Error generating token: "+error.message);
+        console.log("Exception from auth.service.js: ",error.message);
+        throw error;
     }
 }
 
